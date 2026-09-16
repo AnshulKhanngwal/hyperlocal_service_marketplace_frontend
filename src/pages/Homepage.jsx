@@ -1,26 +1,54 @@
-import React from 'react'
-import Contact from '../components/Contact'
+import React, { useEffect, useContext, useState } from 'react'
 import SideNav from '../components/SideNav'
+import UserContext from '../components/UserContext'
+import { SideNavElements } from '../utils/SideNavElements'
+import Profile from '../components/Profile'
+import { Notification } from '../components/Notification'
 
 
 const Homepage = () => {
   // const [content, setContent] = useState(sideTitle.`${user.role}`)
-    const sideTitle = {
-      "CUSTOMER": ["Service", "Bookings", "Feedback"],
-      "Admin": ["Customers", "Service Providers", "Reports"]
-    }
+   const [content, setContent] = useState(<></>)
+  const [open, setOpen] = useState(false);
+    const user = useContext(UserContext);
+    useEffect(() => { 
+        console.log("User in Homepage", user);
+    }, []);
   return (
     <>
-      <div>
+      {/* <div>
         <nav className="flex justify-between gap-6 text-2xl px-10 py-4 text-white bg-black/80">
             <h2>HLSM</h2>
             <section className="flex justify-end gap-6">
-            <Contact />
+            <Notification/>
+            <Profile/>
             </section>
         </nav>
-      </div>
+      </div> */}
       <div>
-        <SideNav titles={sideTitle}/>
+          <nav className="fixed top-0 left-0 w-full z-50 flex justify-between gap-6 text-2xl sm:px-10 py-4 text-white bg-black">
+            <div className="flex flex-row gap-3 text-left">
+              <button className="sm:hidden"
+                  onClick={() => {setOpen(!open)}}>
+                  <svg class="w-8 h-8 text-gray-800 pl-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                  </svg>
+              </button>
+              <h2>HLSM</h2>
+              </div>
+              <section className="flex justify-end gap-6">
+                  <Notification />
+                  <Profile />
+              </section>
+          </nav>
+      </div>
+      <div className="flex flex-row mt-15">
+      <div>
+        <SideNav titles={SideNavElements} setContent={setContent} open={open}/>
+      </div>
+      <div className="sm:ml-66 mt-2 border -1 w-screen h-screen rounded-lg">
+        {content}
+      </div>
       </div>
     </>
   )

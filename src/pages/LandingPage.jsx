@@ -1,8 +1,11 @@
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import Contact from "../components/Contact";
+import { useContext } from "react";
+import UserContext from "../components/UserContext";
 
 function LandingPage(){
+    const {user, setUser} = useContext(UserContext)
     return (
         <div className="min-h-screen my-auto w-full bg-[#F7F2EB] relative overflow-hidden">
             {/* <video
@@ -15,11 +18,11 @@ function LandingPage(){
                  <source src="/background.mp4" type="video/mp4" />
             </video> */}
             <div className="relative z-10">
-                <nav className="flex justify-between gap-6 text-2xl px-10 py-4 text-white bg-black/80">
+                <nav className="sticky flex justify-between gap-6 text-2xl px-10 py-4 text-white bg-black/80">
                     <h2>HLSM</h2>
                     <section className="flex justify-end gap-6">
-                    <Login />
-                    <SignUp />
+                    <Login setUser={setUser}/>
+                    <SignUp setUser={setUser}/>
                     <Contact />
                     </section>
                 </nav>

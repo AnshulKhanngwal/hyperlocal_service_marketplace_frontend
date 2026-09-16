@@ -29,10 +29,10 @@ function Contact({name}){
 
     return(
         <>
-        <button onClick={handleClose}>Contact Us</button>
+        <button onClick={handleClose} className="hover: text-white hover:scale-110 transition">{name ? name : "Contact Us"} </button>
         {show &&
         <div className="absolute m-auto bg-[#8B9A6E]">
-            {name} Toolbox
+            {name ? name : "Contact Us"} 
             <p onClick={() => setShow(!show)}>Close</p>
             <form className="flex flex-col text-gray-900" onSubmit={handleSubmit((data) => apiCall(data))}>
                 <input {...register("name", {required: "Name is required."})} placeholder="Name"/>

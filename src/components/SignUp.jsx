@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import UserContext from "./UserContext";
 
-function SignUp({name}){
+function SignUp({setUser}){
+    const user = useContext(UserContext);
     const [show, setShow] = useState(false);
     const {register, handleSubmit, formState: {errors}, reset} = useForm();
     const handleClose = () => {
         setShow(!show);
         reset();
     }
+    useEffect(() => {
+        console.log(user);
+    }, [setUser]);
     const apiCall = async (data) => {
         console.log("Entered HandleSubmit", data)
         // e.preventDefault();
@@ -19,8 +24,9 @@ function SignUp({name}){
         };
         try {
         const response = await axios.post('http://localhost:3000/auth/register', reqData); 
-        const data = await response.json();
-        console.log('Success:', data);
+        // const data = await response.json();
+        // console.log('Success:', data);
+        setUser(data);
         alert('Registered successfully!');
         } catch (err) {
         console.log('Error sending data:', err);
@@ -31,10 +37,10 @@ function SignUp({name}){
 
     return(
         <>
-        <button onClick={handleClose}>Register</button>
+        <button onClick={handleClose} className="hover: text-white hover:scale-110 transition">Register</button>
         {show &&
         <div className="absolute m-auto bg-[#8B9A6E]">
-            {name} Toolbox
+            Toolbox
             <p onClick={() => setShow(!show)}>Close</p>
             <form className="flex flex-col text-gray-900" onSubmit={handleSubmit((data) => apiCall(data))}>
                 <input {...register("name", {required: "Name is required."})} placeholder="Name"/>
