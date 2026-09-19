@@ -3,7 +3,7 @@ import UserContext from './UserContext'
 
 const SideNav = ({titles, setContent, open}) => {
   // const user = useContext(UserContext);
-  const sideElements = titles.CUSTOMER; //user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
+  const sideElements = titles.ADMIN; //user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
 
   return (
     <div fixed left-0 right-0 top-640 bottom-0>
