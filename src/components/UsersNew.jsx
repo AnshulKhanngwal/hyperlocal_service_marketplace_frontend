@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-const initialPage = 1;
-
 const users = [
   { id: 1, name: "Rahul Sharma", email: "rahul@gmail.com", role: "Customer" },
   { id: 2, name: "Amit Kumar", email: "amit@gmail.com", role: "Service Provider" },
@@ -17,9 +15,9 @@ const users = [
   { id: 12, name: "Sneha Kapoor", email: "sneha@gmail.com", role: "Customer" },
 ];
 
-const Feedback = () => {
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  // const currentPage = 1
+const Users = () => {
+  // const [currentPage, setCurrentPage] = useState(2);
+  const currentPage = 1;
 
   const rowsPerPage = 5;
 
@@ -39,7 +37,7 @@ const Feedback = () => {
 
           <thead className="bg-gray-100 text-xs uppercase text-gray-700">
             <tr>
-              <th className="px-6 py-4">ID1</th>
+              <th className="px-6 py-4">ID</th>
               <th className="px-6 py-4">Name</th>
               <th className="px-6 py-4">Email</th>
               <th className="px-6 py-4">Role</th>
@@ -151,4 +149,4 @@ const Feedback = () => {
   );
 }
 
-export default Feedback;
+export default Users;

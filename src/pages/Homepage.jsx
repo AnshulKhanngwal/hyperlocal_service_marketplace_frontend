@@ -3,12 +3,17 @@ import SideNav from '../components/SideNav'
 import UserContext from '../components/UserContext'
 import { SideNavElements } from '../utils/SideNavElements'
 import Profile from '../components/Profile'
-import { Notification } from '../components/Notification'
+import Notification from '../components/Notification'
+import Users from '../components/Users'
+import Booking from '../components/Booking'
+
+const currentElements = SideNavElements.ADMIN;
 
 
 const Homepage = () => {
   // const [content, setContent] = useState(sideTitle.`${user.role}`)
-   const [content, setContent] = useState(<></>)
+   const [content, setContent] = useState(0)
+   const Component = currentElements[content].component;
   const [open, setOpen] = useState(false);
     const user = useContext(UserContext);
     useEffect(() => { 
@@ -37,17 +42,17 @@ const Homepage = () => {
               <h2>HLSM</h2>
               </div>
               <section className="flex justify-end gap-6">
-                  <Notification />
+                  {/* <Notification /> */}
                   <Profile />
               </section>
           </nav>
       </div>
       <div className="flex flex-row mt-15">
       <div>
-        <SideNav titles={SideNavElements} setContent={setContent} open={open}/>
+        <SideNav titles={currentElements} setContent={setContent} open={open}/>
       </div>
       <div className="sm:ml-66 mt-2 border -1 w-screen h-screen rounded-lg">
-        {content}
+        <Component/>
       </div>
       </div>
     </>

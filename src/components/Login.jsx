@@ -24,7 +24,10 @@ function Login({setUser}){
         const response = await axios.post('http://localhost:3000/auth/login', reqData); 
         // const data = await response.json();
         // console.log('Success:', data);
-        setUser(data);
+        setUser(response.data);
+        console.log("This is your response", response)
+        const token = response.data.accessToken;
+        localStorage.setItem("token", token);
         alert('Login successful !');
         navigate("/home")
         } catch (err) {

@@ -3,7 +3,7 @@ import UserContext from './UserContext'
 
 const SideNav = ({titles, setContent, open}) => {
   // const user = useContext(UserContext);
-  const sideElements = titles.ADMIN; //user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
+  //const sideElements = titles.ADMIN; //user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
 
   return (
     <div fixed left-0 right-0 top-640 bottom-0>
@@ -16,10 +16,10 @@ const SideNav = ({titles, setContent, open}) => {
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
           <ul className="space-y-2 font-medium">
-            {sideElements.map((item) => (
+            {titles.map((item) => (
             <li>
               <a
-              onClick={()=> setContent(item.component)}
+              onClick={()=> setContent(titles.indexOf(item))}
                 href="#"
                 className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group"
               >
