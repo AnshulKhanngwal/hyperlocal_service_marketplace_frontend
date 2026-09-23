@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react'
 import UserContext from './UserContext'
 
 const SideNav = ({titles, setContent, open}) => {
-  // const user = useContext(UserContext);
-  //const sideElements = titles.ADMIN; //user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
+  const user = useContext(UserContext);
+  const sideElements = user.role == 'ADMIN' ? titles.ADMIN : titles.CUSTOMER;
 
   return (
     <div fixed left-0 right-0 top-640 bottom-0>

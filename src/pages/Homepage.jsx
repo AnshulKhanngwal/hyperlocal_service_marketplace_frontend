@@ -7,15 +7,14 @@ import Notification from '../components/Notification'
 import Users from '../components/Users'
 import Booking from '../components/Booking'
 
-const currentElements = SideNavElements.ADMIN;
-
 
 const Homepage = () => {
   // const [content, setContent] = useState(sideTitle.`${user.role}`)
+   const [open, setOpen] = useState(false);
+   const user = useContext(UserContext);
+   const currentElements = user.role == "ADMIN" ? SideNavElements.ADMIN : user.role == "CUSTOMER" ? SideNavElements.CUSTOMER : SideNavElements.PROVIDER;
    const [content, setContent] = useState(0)
    const Component = currentElements[content].component;
-  const [open, setOpen] = useState(false);
-    const user = useContext(UserContext);
     useEffect(() => { 
         console.log("User in Homepage", user);
     }, []);
@@ -51,7 +50,7 @@ const Homepage = () => {
       <div>
         <SideNav titles={currentElements} setContent={setContent} open={open}/>
       </div>
-      <div className="sm:ml-66 mt-2 border -1 w-screen h-screen rounded-lg">
+      <div className="sm:ml-66 mt-2 border -1 w-screen rounded-lg">
         <Component/>
       </div>
       </div>

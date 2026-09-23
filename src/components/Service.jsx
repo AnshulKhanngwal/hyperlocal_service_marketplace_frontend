@@ -1,79 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext  } from "react";
+import { getApiCall } from "../utils/apiCall";
+import UserContext from "./UserContext";
 
 const initialPage = 1;
 
-const users = [
-  { id: 1, name: "Rahul Sharma", email: "rahul@gmail.com", role: "Customer" },
-  { id: 2, name: "Amit Kumar", email: "amit@gmail.com", role: "Service Provider" },
-  { id: 3, name: "Priya Singh", email: "priya@gmail.com", role: "Customer" },
-  { id: 4, name: "Rohit Verma", email: "rohit@gmail.com", role: "Service Provider" },
-  { id: 5, name: "Neha Gupta", email: "neha@gmail.com", role: "Customer" },
-  { id: 6, name: "Vikas Yadav", email: "vikas@gmail.com", role: "Customer" },
-  { id: 7, name: "Anjali Mehta", email: "anjali@gmail.com", role: "Service Provider" },
-  { id: 8, name: "Karan Singh", email: "karan@gmail.com", role: "Customer" },
-  { id: 9, name: "Pooja Sharma", email: "pooja@gmail.com", role: "Customer" },
-  { id: 10, name: "Arjun Patel", email: "arjun@gmail.com", role: "Service Provider" },
-  { id: 11, name: "Mohit Jain", email: "mohit@gmail.com", role: "Customer" },
-  { id: 12, name: "Sneha Kapoor", email: "sneha@gmail.com", role: "Customer" },
-];
-
-const Services = () => {
+const Service = () => {
   const [currentPage, setCurrentPage] = useState(initialPage);
-  // const currentPage = 1
-
-  const rowsPerPage = 5;
+  const [tableData, setTableData] = useState([]);
+  const [role, setRole] = useState("ALL");
+  const {user} = useContext(UserContext);
+  const rowsPerPage = 10;
 
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
 
-  const currentUsers = users.slice(firstIndex, lastIndex);
+  const currentUsers = tableData && tableData.slice(firstIndex, lastIndex);
 
-  const totalPages = Math.ceil(users.length / rowsPerPage);
+  const totalPages = tableData && Math.ceil(tableData.length / rowsPerPage);
+
+  const getData = async () =>{
+    try{
+      const response = await getApiCall("service/getServices?role=" + role == "PROVIDER" ? "SERVICE_PROVIDER" : "");
+      const res = response?.data?.data;
+      console.log("Res Data", res)
+      setTableData(res);
+      } catch (err) {
+      console.log('Error sending data:', err);
+      }
+  }
+
+  useEffect(()=>{
+    getData();
+  }, [])
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-
+      <div className="flex flex-row justify-between p-4 bg-gray-100">
+        <h2 className="text-2xl font-bold">Services</h2>
+        {user.role == "ADMIN" &&
+        (<select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+        >
+          <option value="ALL">ALL</option>
+          <option value="CUSTOMER">CUSTOMER</option>
+          <option value="PROVIDER">PROVIDER</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>)
+        }
+      </div>
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm text-gray-600">
 
-          <thead className="bg-gray-100 text-xs uppercase text-gray-700">
+          <thead className="bg-gray-200 text-xs uppercase text-gray-700">
             <tr>
-              <th className="px-6 py-4">ID1</th>
-              <th className="px-6 py-4">Name</th>
-              <th className="px-6 py-4">Email</th>
-              <th className="px-6 py-4">Role</th>
+              <th className="px-6 py-4">ID</th>
+              <th className="px-6 py-4">Category</th>
+              <th className="px-6 py-4">Description</th>
+              <th className="px-6 py-4">Provider</th>
+              <th className="px-6 py-4">Rating</th>
+              <th className="px-6 py-4">Updated At</th>
+              <th className="px-6 py-4">Created At</th>
             </tr>
           </thead>
 
           <tbody>
-            {currentUsers.map((user) => (
+            {currentUsers && currentUsers.map((item) => (
               <tr
-                key={user.id}
+                key={item.id}
                 className="border-b hover:bg-gray-50"
               >
                 <td className="px-6 py-4">
-                  {user.id}
+                  {item.id}
                 </td>
 
                 <td className="px-6 py-4 font-medium text-gray-900">
-                  {user.name}
+                  {item.category}
                 </td>
 
                 <td className="px-6 py-4">
-                  {user.email}
+                  {item.description}
                 </td>
 
                 <td className="px-6 py-4">
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      user.role === "Customer"
+                      item.role === "Customer"
                         ? "bg-blue-100 text-blue-700"
                         : "bg-green-100 text-green-700"
                     }`}
                   >
-                    {user.role}
+                    {item.providerId}
                   </span>
+                </td>
+                <td className="px-6 py-4">
+                  {item.review_values || 5/item.total_reviews || 1}
+                </td>
+                <td className="px-6 py-4">
+                  {item.updatedAt}
+                </td>
+                <td className="px-6 py-4">
+                  {item.createdAt}
                 </td>
               </tr>
             ))}
@@ -93,11 +122,11 @@ const Services = () => {
           </span>{" "}
           to{" "}
           <span className="font-medium">
-            {Math.min(lastIndex, users.length)}
+            {Math.min(lastIndex, tableData && tableData.length)}
           </span>{" "}
           of{" "}
           <span className="font-medium">
-            {users.length}
+            {tableData && tableData.length}
           </span>
         </p>
 
@@ -151,4 +180,4 @@ const Services = () => {
   );
 }
 
-export default Services;
+export default Service;

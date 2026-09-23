@@ -21,7 +21,7 @@ function CommonForm({name}){
         const response = await axios.post('http://localhost:3000/auth/register', reqData); 
         const data = await response.json();
         console.log('Success:', data);
-        alert('Registered successfully!');
+        console.log("Token:", localStorage.getItem("token"));
         } catch (err) {
         console.log('Error sending data:', err);
         }
