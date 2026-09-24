@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import UserContext from "./UserContext";
 
 function Login({setUser}){
-    const user = useContext(UserContext);
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const {register, handleSubmit, formState: {errors}, reset} = useForm();
@@ -24,14 +23,18 @@ function Login({setUser}){
         const response = await axios.post('http://localhost:3000/auth/login', reqData); 
         // const data = await response.json();
         // console.log('Success:', data);
-        setUser(response.data);
+        console.log("This is your response status", response.status);
+        // if(response.status == 200)
+        setUser(response.data.data);
         console.log("This is your response", response)
         const token = response.data.accessToken;
         localStorage.setItem("token", token);
         alert('Login successful !');
         navigate("/home")
         } catch (err) {
-        console.log('Error sending data:', err);
+        console.log('Error sending data:', err.response.data.message);
+        alert(err.response.data.message);
+
         }
     };
 

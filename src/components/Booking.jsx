@@ -1,13 +1,16 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect, useContext  } from "react";
 import { getApiCall } from "../utils/apiCall";
+import UserContext from "./UserContext";
 
 const initialPage = 1;
 
 const Booking = () => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [tableData, setTableData] = useState([]);
-
+  const [category, setCategory] = useState("ALL");
+  const {user} = useContext(UserContext);
   const rowsPerPage = 10;
+  console.log("User in bookings", user)
 
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
@@ -19,7 +22,7 @@ const Booking = () => {
   const getData = async () =>{
     try{
       console.log("Token in frontend Booking:", localStorage.getItem("token"));
-      const response = await getApiCall("booking/getBookings");
+      const response = await getApiCall("booking/getBookings?category=" + category);
       const res = response?.data?.data;
       console.log("Res Data", res)
       setTableData(res);
@@ -30,13 +33,24 @@ const Booking = () => {
 
   useEffect(()=>{
     getData();
-  }, [])
+  }, [category])
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-row justify-between p-4 bg-gray-100">
         <h2 className="text-2xl font-bold">Bookings</h2>
-        <></>
+        {(user && user.role === "ADMIN") &&
+        (<select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+        >
+          <option value="ALL">ALL</option>
+          <option value="TUTOR">TUTOR</option>
+          <option value="ELECTRICIAN">ELECTRICIAN</option>
+          <option value="PLUMBER">PLUMBER</option>
+        </select>)
+        }
       </div>
 
       {/* Table */}

@@ -9,6 +9,7 @@ const Service = () => {
   const [tableData, setTableData] = useState([]);
   const [role, setRole] = useState("ALL");
   const {user} = useContext(UserContext);
+  const [openModal, setOpenModal] = useState(false);
   const rowsPerPage = 10;
 
   const lastIndex = currentPage * rowsPerPage;
@@ -20,7 +21,7 @@ const Service = () => {
 
   const getData = async () =>{
     try{
-      const response = await getApiCall("service/getServices?role=" + role == "PROVIDER" ? "SERVICE_PROVIDER" : "");
+      const response = await getApiCall("service/getServices?role=" + (role == "PROVIDER" ? "SERVICE_PROVIDER" : ""));
       const res = response?.data?.data;
       console.log("Res Data", res)
       setTableData(res);
@@ -37,7 +38,7 @@ const Service = () => {
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-row justify-between p-4 bg-gray-100">
         <h2 className="text-2xl font-bold">Services</h2>
-        {user.role == "ADMIN" &&
+        {(user && user.role === "ADMIN") &&
         (<select
           value={role}
           onChange={(e) => setRole(e.target.value)}
@@ -63,6 +64,7 @@ const Service = () => {
               <th className="px-6 py-4">Rating</th>
               <th className="px-6 py-4">Updated At</th>
               <th className="px-6 py-4">Created At</th>
+              <th className="px-6 py-4">Actions</th>
             </tr>
           </thead>
 
@@ -103,6 +105,9 @@ const Service = () => {
                 </td>
                 <td className="px-6 py-4">
                   {item.createdAt}
+                </td>
+                <td className="px-6 py-4">
+                  <button className="border-2 p-2 rounded" onClick={() => {}}>Book</button>
                 </td>
               </tr>
             ))}
