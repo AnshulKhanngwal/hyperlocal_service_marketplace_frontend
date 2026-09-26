@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import UserContext from "./UserContext";
+import { postApiCall } from "../utils/apiCall";
 
-const BookingModal = ({open}) => {
-  const [isOpen, setIsOpen] = useState(open);
+const BookingModal = ({open, setOpen, item}) => {
+  const {user} = useContext(UserContext);
+  const [note, setNote] = useState("");
+  const bookingApi = async () => {
+    console.log("This is your item", item.providerId)
+    const reqData = {
+            "userId": user.id,
+            "serviceId": item.id,
+            "providerId": item.providerId,
+            "customerNote": note,
+            "ProviderNote": ""
+        }
+    try{
+    const response = await postApiCall("booking/createBooking", reqData);
+    console.log("Booking confirm data", response);
+    alert(response.message);
+    } catch (err) {
+    console.log('Error sending data:', err);
+    alert(err)
+    }
+  }
 
   return (
-    <div className="p-10">
+    <div className="p-2">
       {/* Open Modal Button */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => setOpen(true)}
         className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"
       >
-        Open Modal
+        Book
       </button>
 
       {/* Modal */}
-      {isOpen && (
+      {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={() => setIsOpen(false)}
+          onClick={() => setOpen(false)}
         >
           {/* Modal Content */}
           <div
@@ -27,11 +48,11 @@ const BookingModal = ({open}) => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-800">
-                Modal Title
+                Confirm Booking
               </h2>
 
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => setOpen(false)}
                 className="text-2xl text-gray-500 hover:text-gray-800"
               >
                 &times;
@@ -41,21 +62,22 @@ const BookingModal = ({open}) => {
             {/* Body */}
             <div className="mt-4">
               <p className="text-gray-600">
-                This is a simple modal built with React and Tailwind CSS.
+                Do you want to book this {item.category} service ?
               </p>
             </div>
 
             {/* Footer */}
+            <input className="w-full border-1 p-2" type="text" placeholder="Customer Note" onChange={(e) => setNote(e.target.value)} />
             <div className="mt-6 flex justify-end gap-3">
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => setOpen(false)}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Cancel
               </button>
 
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => {bookingApi();setOpen(false);}}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
               >
                 Confirm

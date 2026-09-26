@@ -42,7 +42,7 @@ const Homepage = () => {
               </div>
               <section className="flex justify-end gap-6">
                   {/* <Notification /> */}
-                  <Profile />
+                  <Profile user={user}/>
               </section>
           </nav>
       </div>

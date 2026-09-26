@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const token = localStorage.getItem("token");
 
 export const getApiCall = async (endpoint) =>{
+    const token = localStorage.getItem("token");
     console.log("base url", import.meta.env.VITE_BASE_URL);
     console.log("Token before api", token);
     try{
@@ -18,6 +18,7 @@ export const getApiCall = async (endpoint) =>{
   }
 
 export const postApiCall = async (endpoint, data) =>{
+  const token = localStorage.getItem("token");
     try{
       
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/${endpoint}`,
@@ -27,8 +28,9 @@ export const postApiCall = async (endpoint, data) =>{
           Authorization: `Bearer ${token}`,
         },
       });
-      const res = response?.data?.data;
+      const res = response?.data;
       console.log("Res Data", res)
+      return res;
       } catch (err) {
       return err;
       }

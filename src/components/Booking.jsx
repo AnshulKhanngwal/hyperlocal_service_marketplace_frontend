@@ -21,13 +21,12 @@ const Booking = () => {
 
   const getData = async () =>{
     try{
-      console.log("Token in frontend Booking:", localStorage.getItem("token"));
       const response = await getApiCall("booking/getBookings?category=" + category);
       const res = response?.data?.data;
-      console.log("Res Data", res)
       setTableData(res);
       } catch (err) {
       console.log('Error sending data:', err);
+      alert(err)
       }
   }
 
@@ -39,7 +38,7 @@ const Booking = () => {
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-row justify-between p-4 bg-gray-100">
         <h2 className="text-2xl font-bold">Bookings</h2>
-        {(user && user.role === "ADMIN") &&
+        {/* {(user && (user.role === "ADMIN" || user.role === "CUSTOMER")) &&
         (<select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -50,7 +49,7 @@ const Booking = () => {
           <option value="ELECTRICIAN">ELECTRICIAN</option>
           <option value="PLUMBER">PLUMBER</option>
         </select>)
-        }
+        } */}
       </div>
 
       {/* Table */}
@@ -85,7 +84,7 @@ const Booking = () => {
                 </td>
 
                 <td className="px-6 py-4">
-                  {item.userId}
+                  {item?.user?.name}
                 </td>
 
                 <td className="px-6 py-4">
@@ -96,7 +95,7 @@ const Booking = () => {
                         : "bg-green-100 text-green-700"
                     }`}
                   >
-                    {item.providerId}
+                    {item?.provider?.name}
                   </span>
                 </td>
                 <td className="px-6 py-4">

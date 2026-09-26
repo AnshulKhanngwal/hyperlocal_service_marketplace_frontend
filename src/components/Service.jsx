@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext  } from "react";
 import { getApiCall } from "../utils/apiCall";
 import UserContext from "./UserContext";
+import BookingModal from "./BookingModal";
+import AddServiceModal from "./AddServiceModal";
 
 const initialPage = 1;
 
 const Service = () => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [tableData, setTableData] = useState([]);
-  const [role, setRole] = useState("ALL");
+  const [category, setCategory] = useState("ALL");
   const {user} = useContext(UserContext);
-  const [openModal, setOpenModal] = useState(false);
+  const [open, setOpen] = useState(false);
   const rowsPerPage = 10;
-
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
 
@@ -21,7 +22,7 @@ const Service = () => {
 
   const getData = async () =>{
     try{
-      const response = await getApiCall("service/getServices?role=" + (role == "PROVIDER" ? "SERVICE_PROVIDER" : ""));
+      const response = await getApiCall("service/getServices?category=" + category);
       const res = response?.data?.data;
       console.log("Res Data", res)
       setTableData(res);
@@ -32,23 +33,24 @@ const Service = () => {
 
   useEffect(()=>{
     getData();
-  }, [])
+  }, [category])
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-row justify-between p-4 bg-gray-100">
         <h2 className="text-2xl font-bold">Services</h2>
-        {(user && user.role === "ADMIN") &&
+        {(user && (user.role === "ADMIN" || user.role === "CUSTOMER")) ?
         (<select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
           className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
         >
           <option value="ALL">ALL</option>
-          <option value="CUSTOMER">CUSTOMER</option>
-          <option value="PROVIDER">PROVIDER</option>
-          <option value="ADMIN">ADMIN</option>
-        </select>)
+          <option value="TUTOR">TUTOR</option>
+          <option value="ELECTRICIAN">ELECTRICIAN</option>
+          <option value="PLUMBER">PLUMBER</option>
+        </select>) :
+        (<AddServiceModal />)
         }
       </div>
       {/* Table */}
@@ -94,11 +96,11 @@ const Service = () => {
                         : "bg-green-100 text-green-700"
                     }`}
                   >
-                    {item.providerId}
+                    {item?.provider?.name}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  {item.review_values || 5/item.total_reviews || 1}
+                  {"✯".repeat(item.review_values/item.total_reviews || 5)}
                 </td>
                 <td className="px-6 py-4">
                   {item.updatedAt}
@@ -106,9 +108,10 @@ const Service = () => {
                 <td className="px-6 py-4">
                   {item.createdAt}
                 </td>
+                {user.role === "CUSTOMER" &&
                 <td className="px-6 py-4">
-                  <button className="border-2 p-2 rounded" onClick={() => {}}>Book</button>
-                </td>
+                    <BookingModal open={open} setOpen={setOpen} item={item}/>
+                </td>}
               </tr>
             ))}
           </tbody>
