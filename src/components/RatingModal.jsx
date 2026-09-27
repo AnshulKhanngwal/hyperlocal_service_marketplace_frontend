@@ -5,12 +5,13 @@ import { postApiCall } from "../utils/apiCall";
 const RatingModal = ({item}) => {
   const {user} = useContext(UserContext);
   const [open, setOpen] = useState(false);
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(1);
   const ratingApi = async () => {
     const reqData = {
             "serviceId": item.serviceId,
             "rating": rating,
         }
+    console.log("Rating", rating);
     try{
     const response = await postApiCall("service/addRating", reqData);
     alert(response.message);
@@ -59,7 +60,7 @@ const RatingModal = ({item}) => {
 
             {/* Footer */}
             <select
-                onChange={(e)=> setRating(e.target.value)}
+                onChange={(e)=> setRating(Number(e.target.value))}
                 className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
             >
                 <option value="1">

@@ -69,10 +69,6 @@ export const SideNavElements = {
             "component":Feedback
         },
         {
-            "name":"Reports",
-            "component":Report
-        },
-        {
             "name":"Notification",
             "component":Notification
         },

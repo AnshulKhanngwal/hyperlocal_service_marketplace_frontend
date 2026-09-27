@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext  } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getApiCall } from "../utils/apiCall";
 import UserContext from "./UserContext";
 import BookingModal from "./BookingModal";
@@ -10,7 +10,7 @@ const Service = () => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [tableData, setTableData] = useState([]);
   const [category, setCategory] = useState("ALL");
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const rowsPerPage = 10;
   const lastIndex = currentPage * rowsPerPage;
@@ -20,17 +20,17 @@ const Service = () => {
 
   const totalPages = tableData && Math.ceil(tableData.length / rowsPerPage);
 
-  const getData = async () =>{
-    try{
+  const getData = async () => {
+    try {
       const response = await getApiCall("service/getServices?category=" + category);
       const res = response?.data?.data;
       setTableData(res);
-      } catch (err) {
+    } catch (err) {
       console.log('Error sending data:', err);
-      }
+    }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getData();
   }, [category])
 
@@ -39,17 +39,17 @@ const Service = () => {
       <div className="flex flex-row justify-between p-4 bg-gray-100">
         <h2 className="text-2xl font-bold">Services</h2>
         {(user && (user.role === "ADMIN" || user.role === "CUSTOMER")) ?
-        (<select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-        >
-          <option value="ALL">ALL</option>
-          <option value="TUTOR">TUTOR</option>
-          <option value="ELECTRICIAN">ELECTRICIAN</option>
-          <option value="PLUMBER">PLUMBER</option>
-        </select>) :
-        (<AddServiceModal />)
+          (<select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          >
+            <option value="ALL">ALL</option>
+            <option value="TUTOR">TUTOR</option>
+            <option value="ELECTRICIAN">ELECTRICIAN</option>
+            <option value="PLUMBER">PLUMBER</option>
+          </select>) :
+          (<AddServiceModal />)
         }
       </div>
       {/* Table */}
@@ -66,9 +66,9 @@ const Service = () => {
               <th className="px-6 py-4">Updated At</th>
               <th className="px-6 py-4">Created At</th>
               {(user.role === "CUSTOMER") &&
-              <th className="px-6 py-4">Distance</th>}
+                <th className="px-6 py-4">Distance</th>}
               {(user.role === "CUSTOMER") &&
-              <th className="px-6 py-4">Actions</th>}
+                <th className="px-6 py-4">Actions</th>}
             </tr>
           </thead>
 
@@ -92,17 +92,16 @@ const Service = () => {
 
                 <td className="px-6 py-4">
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      item.role === "Customer"
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${item.role === "Customer"
                         ? "bg-blue-100 text-blue-700"
                         : "bg-green-100 text-green-700"
-                    }`}
+                      }`}
                   >
                     {item?.provider?.name}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  {"✯".repeat(Math.floor(item.review_values/item.total_reviews) || 5)}
+                  {(item.reviews_values && item.total_reviews) ? "✯".repeat(Math.floor(item.reviews_values / item.total_reviews)) : "✯".repeat(5)}
                 </td>
                 <td className="px-6 py-4">
                   {item.updatedAt}
@@ -111,15 +110,15 @@ const Service = () => {
                   {item.createdAt}
                 </td>
                 {(user.role === "CUSTOMER") &&
-                (
-                <td className="px-6 py-4">
-                  <pre><b>{item.distance}</b> kilometer(s)</pre>
-                </td>)}
+                  (
+                    <td className="px-6 py-4">
+                      <pre><b>{item.distance}</b> kilometer(s)</pre>
+                    </td>)}
                 {(user.role === "CUSTOMER") &&
-                (
-                <td className="px-6 py-4">
-                    <BookingModal open={open} setOpen={setOpen} item={item}/>
-                </td>)}
+                  (
+                    <td className="px-6 py-4">
+                      <BookingModal open={open} setOpen={setOpen} item={item} />
+                    </td>)}
               </tr>
             ))}
           </tbody>
@@ -168,11 +167,10 @@ const Service = () => {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`rounded-md px-3 py-2 text-sm font-medium ${
-                currentPage === page
+              className={`rounded-md px-3 py-2 text-sm font-medium ${currentPage === page
                   ? "bg-black text-white"
                   : "border border-gray-300 text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               {page}
             </button>
