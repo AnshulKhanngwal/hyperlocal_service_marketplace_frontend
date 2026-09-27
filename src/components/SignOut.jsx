@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignOut = () => {
-  console.log("Token before sign out", localStorage.getItem("token"));
-  const navigate = useNavigate();
-  useEffect(()=>{
-    localStorage.removeItem("token");
-    localStorage.clear();
-    delete axios.defaults.headers.common["Authorization"];
-    navigate("/");
-  })
-  return (
-    <div>SignOut</div>
-  )
-}
+    console.log('Token before sign out', localStorage.getItem('token'));
+    const navigate = useNavigate();
+    useEffect(() => {
+        localStorage.removeItem('token');
+        localStorage.clear();
+        delete axios.defaults.headers.common['Authorization'];
+        navigate('/');
+    });
+    return <div>SignOut</div>;
+};
 
-export default SignOut
+export default SignOut;

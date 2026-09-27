@@ -1,7 +1,3 @@
-function ServiceCard({service}){
-    return(
-        <div>
-            
-        </div>
-    )
+function ServiceCard({ service }) {
+    return <div></div>;
 }

@@ -1,167 +1,176 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { Link, useNavigate } from "react-router-dom";
-import UserContext from "./UserContext";
+import { Link, useNavigate } from 'react-router-dom';
+import UserContext from './UserContext';
 
-function SignUp({setUser}){
+function SignUp({ setUser }) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
-    const [location, setLocation] = useState({"lat": "", "long": ""});
-    const {register, handleSubmit, formState: {errors}, reset} = useForm();
+    const [location, setLocation] = useState({ lat: '', long: '' });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm();
     const handleClose = () => {
         setShow(!show);
         reset();
-    }
+    };
     useEffect(() => {
         fetchLocation();
-    }, [])
+    }, []);
     const fetchLocation = () => {
-    if (!navigator.geolocation) {
-        alert("Geolocation is not supported by this browser.");
-        return;
-    }
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const { latitude, longitude } = position.coords;
-            setLocation({
-                "lat":latitude,
-                "long":longitude
-            });
-        },
-        (error) => {
-            console.error("Error fetching location:", error.message);
+        if (!navigator.geolocation) {
+            alert('Geolocation is not supported by this browser.');
+            return;
         }
-    );
-};
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setLocation({
+                    lat: latitude,
+                    long: longitude,
+                });
+            },
+            (error) => {
+                console.error('Error fetching location:', error.message);
+            }
+        );
+    };
     const apiCall = async (data) => {
         const reqData = {
-            "name": data.name,
-            "email": data.email,
-            "phone": data.phone,
-            "password": data.password,
-            "latitude": location.lat,
-            "longitude": location.long
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            password: data.password,
+            latitude: location.lat,
+            longitude: location.long,
         };
         try {
-        const response = await axios.post('http://localhost:3000/auth/register', reqData);
-        setUser(response.data.data);
-        const token = response.data.token;
-        localStorage.setItem("token", token);
-        alert('SignUp successful !');
-        navigate("/home")
+            const response = await axios.post(
+                'http://localhost:3000/auth/register',
+                reqData
+            );
+            setUser(response.data.data);
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            alert('SignUp successful !');
+            navigate('/home');
         } catch (err) {
-        alert(err.response.data.message);
-
+            alert(err.response.data.message);
         }
     };
 
-    return(
+    return (
         <>
-        <button onClick={handleClose} className="hover: text-white hover:scale-110 transition">Sign Up</button>
-        {show &&
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-    <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#8B9A6E] rounded-xl p-6 sm:p-8 shadow-xl">
-
-        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8">
-            Sign Up
-        </h1>
-
-        <form
-            className="flex flex-col text-gray-900 gap-3"
-            onSubmit={handleSubmit((data) => apiCall(data))}
-        >
-
-            <input
-                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
-                {...register("name", {
-                    required: "Name is required"
-                })}
-                placeholder="Name"
-            />
-            <p className="text-red-800 text-sm">
-                {errors.name?.message}
-            </p>
-
-            <select
-                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
-                {...register("role", {
-                    required: "Role is required."
-                })}
+            <button
+                onClick={handleClose}
+                className="hover: text-white hover:scale-110 transition"
             >
-                <option value="SERVICE_PROVIDER">
-                    Service Provider
-                </option>
-                <option value="CUSTOMER">
-                    Customer
-                </option>
-            </select>
+                Sign Up
+            </button>
+            {show && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                    <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#8B9A6E] rounded-xl p-6 sm:p-8 shadow-xl">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8">
+                            Sign Up
+                        </h1>
 
-            <p className="text-red-800 text-sm">
-                {errors.role?.message}
-            </p>
+                        <form
+                            className="flex flex-col text-gray-900 gap-3"
+                            onSubmit={handleSubmit((data) => apiCall(data))}
+                        >
+                            <input
+                                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+                                {...register('name', {
+                                    required: 'Name is required',
+                                })}
+                                placeholder="Name"
+                            />
+                            <p className="text-red-800 text-sm">
+                                {errors.name?.message}
+                            </p>
 
-            <input
-                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
-                {...register("phone", {
-                    required: "Phone is required"
-                })}
-                placeholder="Phone"
-            />
-            <p className="text-red-800 text-sm">
-                {errors.phone?.message}
-            </p>
+                            <select
+                                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+                                {...register('role', {
+                                    required: 'Role is required.',
+                                })}
+                            >
+                                <option value="SERVICE_PROVIDER">
+                                    Service Provider
+                                </option>
+                                <option value="CUSTOMER">Customer</option>
+                            </select>
 
-            <input
-                type="email"
-                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
-                {...register("email", {
-                    required: "Email is required"
-                })}
-                placeholder="Email"
-            />
-            <p className="text-red-800 text-sm">
-                {errors.email?.message}
-            </p>
+                            <p className="text-red-800 text-sm">
+                                {errors.role?.message}
+                            </p>
 
-            <input
-                type="password"
-                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
-                {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                        value: 8,
-                        message: "Password must be at least 8 characters"
-                    }
-                })}
-                placeholder="Password"
-            />
-            <p className="text-red-800 text-sm">
-                {errors.password?.message}
-            </p>
+                            <input
+                                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+                                {...register('phone', {
+                                    required: 'Phone is required',
+                                })}
+                                placeholder="Phone"
+                            />
+                            <p className="text-red-800 text-sm">
+                                {errors.phone?.message}
+                            </p>
 
-            <div className="flex gap-3 mt-4">
-                <button
-                    type="submit"
-                    className="flex-1 bg-white rounded-md py-3 font-semibold hover:bg-gray-100 transition"
-                >
-                    Submit
-                </button>
+                            <input
+                                type="email"
+                                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+                                {...register('email', {
+                                    required: 'Email is required',
+                                })}
+                                placeholder="Email"
+                            />
+                            <p className="text-red-800 text-sm">
+                                {errors.email?.message}
+                            </p>
 
-                <button
-                    type="button"
-                    onClick={() => setShow(!show)}
-                    className="flex-1 bg-white rounded-md py-3 font-semibold hover:bg-gray-100 transition"
-                >
-                    Close
-                </button>
-            </div>
+                            <input
+                                type="password"
+                                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+                                {...register('password', {
+                                    required: 'Password is required',
+                                    minLength: {
+                                        value: 8,
+                                        message:
+                                            'Password must be at least 8 characters',
+                                    },
+                                })}
+                                placeholder="Password"
+                            />
+                            <p className="text-red-800 text-sm">
+                                {errors.password?.message}
+                            </p>
 
-        </form>
-    </div>
-</div>}
+                            <div className="flex gap-3 mt-4">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-white rounded-md py-3 font-semibold hover:bg-gray-100 transition"
+                                >
+                                    Submit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShow(!show)}
+                                    className="flex-1 bg-white rounded-md py-3 font-semibold hover:bg-gray-100 transition"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </>
-    )
+    );
 }
 
 export default SignUp;

@@ -1,80 +1,80 @@
-import Booking from "../components/Booking";
-import Feedback from "../components/Feedback";
-import Notification from "../components/Notification";
-import Report from "../components/Report";
-import Service from "../components/Service";
-import SignOut from "../components/SignOut";
-import Users from "../components/Users";
+import Booking from '../components/Booking';
+import Feedback from '../components/Feedback';
+import Notification from '../components/Notification';
+import Report from '../components/Report';
+import Service from '../components/Service';
+import SignOut from '../components/SignOut';
+import Users from '../components/Users';
 
 export const SideNavElements = {
-      "CUSTOMER": [
+    CUSTOMER: [
         {
-            "name":"Bookings",
-            "component":Booking
+            name: 'Bookings',
+            component: Booking,
         },
         {
-            "name":"Service", 
-            "component":Service
-        }, 
-        {
-            "name":"Feedback",
-            "component":Feedback
+            name: 'Service',
+            component: Service,
         },
         {
-            "name":"Notification",
-            "component":Notification
+            name: 'Feedback',
+            component: Feedback,
         },
         {
-            "name":"Sign Out",
-            "component":SignOut
-        }
+            name: 'Notification',
+            component: Notification,
+        },
+        {
+            name: 'Sign Out',
+            component: SignOut,
+        },
     ],
-    "PROVIDER": [
+    PROVIDER: [
         {
-            "name":"Bookings",
-            "component":Booking
+            name: 'Bookings',
+            component: Booking,
         },
         {
-            "name":"Service", 
-            "component":Service
-        }, 
-        {
-            "name":"Feedback",
-            "component":Feedback
+            name: 'Service',
+            component: Service,
         },
         {
-            "name":"Notification",
-            "component":Notification
+            name: 'Feedback',
+            component: Feedback,
         },
         {
-            "name":"Sign Out",
-            "component":SignOut
-        }
+            name: 'Notification',
+            component: Notification,
+        },
+        {
+            name: 'Sign Out',
+            component: SignOut,
+        },
     ],
-    "ADMIN": [
+    ADMIN: [
         {
-            "name":"Bookings",
-            "component":Booking
+            name: 'Bookings',
+            component: Booking,
         },
         {
-            "name":"Users",
-            "component":Users
+            name: 'Users',
+            component: Users,
         },
         {
-            "name":"Service", 
-            "component":Service
-        }, 
-        {
-            "name":"Feedback",
-            "component":Feedback
+            name: 'Service',
+            component: Service,
         },
         {
-            "name":"Notification",
-            "component":Notification
+            name: 'Feedback',
+            component: Feedback,
         },
         {
-            "name":"Sign Out",
-            "component":SignOut
-        }
-    ]
-}
+            name: 'Notification',
+            component: Notification,
+        },
+        {
+            name: 'Sign Out',
+            component: SignOut,
+        },
+    ],
+};
