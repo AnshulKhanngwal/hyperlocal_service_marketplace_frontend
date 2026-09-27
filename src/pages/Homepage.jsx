@@ -11,8 +11,8 @@ import Booking from '../components/Booking'
 const Homepage = () => {
   // const [content, setContent] = useState(sideTitle.`${user.role}`)
    const [open, setOpen] = useState(false);
-   const user = useContext(UserContext);
-   const currentElements = user.role == "ADMIN" ? SideNavElements.ADMIN : user.role == "CUSTOMER" ? SideNavElements.CUSTOMER : SideNavElements.PROVIDER;
+   const {user} = useContext(UserContext);
+   const currentElements = user.role === "ADMIN" ? SideNavElements.ADMIN : user.role === "CUSTOMER" ? SideNavElements.CUSTOMER : SideNavElements.PROVIDER;
    const [content, setContent] = useState(0)
    const Component = currentElements[content].component;
     useEffect(() => { 

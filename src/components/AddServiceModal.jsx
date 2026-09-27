@@ -15,21 +15,16 @@ function AddServiceModal({setUser}){
         reset();
     }
     const apiCall = async (data) => {
-        console.log("Entered HandleSubmit")
         const reqData = {
             "category": category,
             "description": data.description
         };
-        console.log("Request data in add service", reqData);
         try {
         const response = await postApiCall("service/createService", reqData);
-        console.log("This is your response status", response.status);
         setUser(response.data.data);
         handleClose();
-        console.log("This is your response", response)
         alert('Created successfully !');
         } catch (err) {
-        console.log('Error sending data:', err.response.data.message);
         alert(err.response.data.message);
 
         }

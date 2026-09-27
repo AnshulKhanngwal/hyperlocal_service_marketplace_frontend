@@ -20,7 +20,6 @@ const Notification = () => {
     try{
       const response = await getApiCall("notification/getNotifications");
       const res = response?.data?.data;
-      console.log("Res Data", res)
       setTableData(res);
       } catch (err) {
       console.log('Error sending data:', err);

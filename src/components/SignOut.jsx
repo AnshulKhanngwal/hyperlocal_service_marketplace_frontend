@@ -9,11 +9,6 @@ const SignOut = () => {
     localStorage.removeItem("token");
     localStorage.clear();
     delete axios.defaults.headers.common["Authorization"];
-    console.log(
-      "AXIOS DEFAULT:",
-      axios.defaults.headers.common["Authorization"]
-    );
-    console.log("Token after sign out", localStorage.getItem("token"))
     navigate("/");
   })
   return (

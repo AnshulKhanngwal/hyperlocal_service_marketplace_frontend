@@ -1,9 +1,12 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect, useContext  } from "react";
 import { getApiCall } from "../utils/apiCall";
+import UserContext from "./UserContext";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const initialPage = 1;
 
 const Users = () => {
+  const {user} = useContext(UserContext);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [tableData, setTableData] = useState([]);
 
@@ -20,7 +23,6 @@ const Users = () => {
     try{
       const response = await getApiCall("auth/getUsers");
       const res = response?.data?.data;
-      console.log("Res Data", res)
       setTableData(res);
       } catch (err) {
       console.log('Error sending data:', err);
@@ -50,6 +52,8 @@ const Users = () => {
               <th className="px-6 py-4">Role</th>
               <th className="px-6 py-4">Updated At</th>
               <th className="px-6 py-4">Created At</th>
+              {(user.role === "ADMIN") && 
+              <th className="px-6 py-4">Actions</th>}
             </tr>
           </thead>
 
@@ -91,6 +95,11 @@ const Users = () => {
                 <td className="px-6 py-4">
                   {item.createdAt}
                 </td>
+                {(user.role === "ADMIN") &&
+                <td className="px-6 py-4">
+                  <ChangePasswordModal item={item}/>
+                </td>}               
+
               </tr>
             ))}
           </tbody>

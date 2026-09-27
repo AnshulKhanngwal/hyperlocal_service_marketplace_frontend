@@ -7,32 +7,47 @@ import UserContext from "./UserContext";
 function Login({setUser}){
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
+    const [location, setLocation] = useState({"lat": "", "long": ""});
     const {register, handleSubmit, formState: {errors}, reset} = useForm();
     const handleClose = () => {
         setShow(!show);
         reset();
     }
+    useEffect(() => {
+        fetchLocation();
+    }, [])
+    const fetchLocation = () => {
+    if (!navigator.geolocation) {
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({
+                "lat":latitude,
+                "long":longitude
+            });
+        },
+        (error) => {
+            console.error("Error fetching location:", error.message);
+        }
+    );}
     const apiCall = async (data) => {
-        console.log("Entered HandleSubmit")
         const reqData = {
             "email": data.email,
-            "pass": data.password
+            "pass": data.password,
+            "lat": location.lat,
+            "long": location.long
         };
         try {
-        const response = await axios.post('http://localhost:3000/auth/login', reqData); 
-        // const data = await response.json();
-        // console.log('Success:', data);
-        console.log("This is your response status", response.status);
-        // if(response.status == 200)
-        setUser(response.data.data);
-        console.log("This is your response", response)
-        const token = response.data.accessToken;
-        localStorage.setItem("token", token);
-        alert('Login successful !');
-        navigate("/home")
+            const response = await axios.post('http://localhost:3000/auth/login', reqData); 
+            setUser(response.data.data);
+            const token = response.data.accessToken;
+            localStorage.setItem("token", token);
+            alert('Login successful !');
+            navigate("/home")
         } catch (err) {
-        console.log('Error sending data:', err.response.data.message);
-        alert(err.response.data.message);
+            alert(err.response.data.message);
 
         }
     };
@@ -101,13 +116,6 @@ function Login({setUser}){
             </div>
 
         </form>
-
-        <button
-            onClick={() => navigate("/home")}
-            className="w-full mt-4 bg-white rounded-md py-3 font-semibold hover:bg-gray-100 transition"
-        >
-            Redirect
-        </button>
 
     </div>
 </div>}

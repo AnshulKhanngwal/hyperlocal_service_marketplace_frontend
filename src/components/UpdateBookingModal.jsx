@@ -2,21 +2,22 @@ import React, { useContext, useState } from "react";
 import UserContext from "./UserContext";
 import { postApiCall } from "../utils/apiCall";
 
-const BookingModal = ({open, setOpen, item}) => {
+const UpdateBookingModal = ({status, item}) => {
   const {user} = useContext(UserContext);
+  const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
   const bookingApi = async () => {
+    console.log("This is your item", item.providerId)
     const reqData = {
-            "userId": user.id,
-            "serviceId": item.id,
-            "providerId": item.providerId,
-            "customerNote": note,
-            "ProviderNote": ""
+            "bookingId": item.id,
+            "providerNote": note,
+            "status": status
         }
     try{
-    const response = await postApiCall("booking/createBooking", reqData);
+    const response = await postApiCall("booking/updateBooking", reqData);
     alert(response.message);
     } catch (err) {
+    console.log('Error sending data:', err);
     alert(err)
     }
   }
@@ -28,7 +29,7 @@ const BookingModal = ({open, setOpen, item}) => {
         onClick={() => setOpen(true)}
         className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"
       >
-        Book
+        {status}
       </button>
 
       {/* Modal */}
@@ -45,7 +46,7 @@ const BookingModal = ({open, setOpen, item}) => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-800">
-                Confirm Booking
+                {status} Booking
               </h2>
 
               <button
@@ -59,12 +60,12 @@ const BookingModal = ({open, setOpen, item}) => {
             {/* Body */}
             <div className="mt-4">
               <p className="text-gray-600">
-                Do you want to book this {item.category} service ?
+                Do you want to mark "{status}" this booking.
               </p>
             </div>
 
             {/* Footer */}
-            <input className="w-full border-1 p-2" type="text" placeholder="Customer Note" onChange={(e) => setNote(e.target.value)} />
+            <input className="w-full border-1 p-2" type="text" placeholder="Provider Note" onChange={(e) => setNote(e.target.value)} />
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setOpen(false)}
@@ -87,4 +88,4 @@ const BookingModal = ({open, setOpen, item}) => {
   );
 };
 
-export default BookingModal;
+export default UpdateBookingModal;

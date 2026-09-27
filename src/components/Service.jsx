@@ -24,7 +24,6 @@ const Service = () => {
     try{
       const response = await getApiCall("service/getServices?category=" + category);
       const res = response?.data?.data;
-      console.log("Res Data", res)
       setTableData(res);
       } catch (err) {
       console.log('Error sending data:', err);
@@ -66,7 +65,10 @@ const Service = () => {
               <th className="px-6 py-4">Rating</th>
               <th className="px-6 py-4">Updated At</th>
               <th className="px-6 py-4">Created At</th>
-              <th className="px-6 py-4">Actions</th>
+              {(user.role === "CUSTOMER") &&
+              <th className="px-6 py-4">Distance</th>}
+              {(user.role === "CUSTOMER") &&
+              <th className="px-6 py-4">Actions</th>}
             </tr>
           </thead>
 
@@ -100,7 +102,7 @@ const Service = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  {"✯".repeat(item.review_values/item.total_reviews || 5)}
+                  {"✯".repeat(Math.floor(item.review_values/item.total_reviews) || 5)}
                 </td>
                 <td className="px-6 py-4">
                   {item.updatedAt}
@@ -108,10 +110,16 @@ const Service = () => {
                 <td className="px-6 py-4">
                   {item.createdAt}
                 </td>
-                {user.role === "CUSTOMER" &&
+                {(user.role === "CUSTOMER") &&
+                (
+                <td className="px-6 py-4">
+                  <pre><b>{item.distance}</b> kilometer(s)</pre>
+                </td>)}
+                {(user.role === "CUSTOMER") &&
+                (
                 <td className="px-6 py-4">
                     <BookingModal open={open} setOpen={setOpen} item={item}/>
-                </td>}
+                </td>)}
               </tr>
             ))}
           </tbody>

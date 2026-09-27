@@ -2,21 +2,20 @@ import React, { useContext, useState } from "react";
 import UserContext from "./UserContext";
 import { postApiCall } from "../utils/apiCall";
 
-const BookingModal = ({open, setOpen, item}) => {
+const RatingModal = ({item}) => {
   const {user} = useContext(UserContext);
-  const [note, setNote] = useState("");
-  const bookingApi = async () => {
+  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(5);
+  const ratingApi = async () => {
     const reqData = {
-            "userId": user.id,
-            "serviceId": item.id,
-            "providerId": item.providerId,
-            "customerNote": note,
-            "ProviderNote": ""
+            "serviceId": item.serviceId,
+            "rating": rating,
         }
     try{
-    const response = await postApiCall("booking/createBooking", reqData);
+    const response = await postApiCall("service/addRating", reqData);
     alert(response.message);
     } catch (err) {
+    console.log('Error sending data:', err);
     alert(err)
     }
   }
@@ -28,7 +27,7 @@ const BookingModal = ({open, setOpen, item}) => {
         onClick={() => setOpen(true)}
         className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"
       >
-        Book
+        Add Rating
       </button>
 
       {/* Modal */}
@@ -45,7 +44,7 @@ const BookingModal = ({open, setOpen, item}) => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-800">
-                Confirm Booking
+                Add Rating
               </h2>
 
               <button
@@ -57,14 +56,28 @@ const BookingModal = ({open, setOpen, item}) => {
             </div>
 
             {/* Body */}
-            <div className="mt-4">
-              <p className="text-gray-600">
-                Do you want to book this {item.category} service ?
-              </p>
-            </div>
 
             {/* Footer */}
-            <input className="w-full border-1 p-2" type="text" placeholder="Customer Note" onChange={(e) => setNote(e.target.value)} />
+            <select
+                onChange={(e)=> setRating(e.target.value)}
+                className="w-full bg-white rounded-md p-3 outline-none focus:ring-2 focus:ring-gray-700"
+            >
+                <option value="1">
+                    1
+                </option>
+                <option value="2">
+                    2
+                </option>
+                <option value="3">
+                    3
+                </option>
+                <option value="4">
+                    4
+                </option>
+                <option value="5">
+                    5
+                </option>
+            </select>
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setOpen(false)}
@@ -74,7 +87,7 @@ const BookingModal = ({open, setOpen, item}) => {
               </button>
 
               <button
-                onClick={() => {bookingApi();setOpen(false);}}
+                onClick={() => {ratingApi();setOpen(false);}}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
               >
                 Confirm
@@ -87,4 +100,4 @@ const BookingModal = ({open, setOpen, item}) => {
   );
 };
 
-export default BookingModal;
+export default RatingModal;

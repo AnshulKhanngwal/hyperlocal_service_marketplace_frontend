@@ -10,7 +10,6 @@ function Contact({name}){
         reset();
     }
     const apiCall = async (data) => {
-        console.log("Entered HandleSubmit")
         // e.preventDefault();
         const reqData = {
             "name": data.name,
@@ -20,7 +19,6 @@ function Contact({name}){
         try {
         const response = await axios.post('http://localhost:3000/auth/register', reqData); 
         const data = await response.json();
-        console.log('Success:', data);
         alert('Registered successfully!');
         } catch (err) {
         console.log('Error sending data:', err);

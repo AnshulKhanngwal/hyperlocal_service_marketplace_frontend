@@ -15,14 +15,12 @@ function SignUp({setUser}){
     }
     useEffect(() => {
         fetchLocation();
-        console.log("These are your co-ordinates", location);
     }, [])
     const fetchLocation = () => {
     if (!navigator.geolocation) {
-        console.log("Geolocation is not supported by this browser.");
+        alert("Geolocation is not supported by this browser.");
         return;
     }
-    console.log("Geolocation is supported by this browser.");
     navigator.geolocation.getCurrentPosition(
         (position) => {
             const { latitude, longitude } = position.coords;
@@ -37,7 +35,6 @@ function SignUp({setUser}){
     );
 };
     const apiCall = async (data) => {
-        console.log("Entered HandleSubmit")
         const reqData = {
             "name": data.name,
             "email": data.email,
@@ -48,15 +45,12 @@ function SignUp({setUser}){
         };
         try {
         const response = await axios.post('http://localhost:3000/auth/register', reqData);
-        console.log("This is your response status", response.status);
         setUser(response.data.data);
-        console.log("This is your response after signup", response.data)
         const token = response.data.token;
         localStorage.setItem("token", token);
         alert('SignUp successful !');
         navigate("/home")
         } catch (err) {
-        console.log('Error sending data:', err.response.data.message);
         alert(err.response.data.message);
 
         }

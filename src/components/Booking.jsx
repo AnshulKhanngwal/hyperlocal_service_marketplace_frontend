@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext  } from "react";
 import { getApiCall } from "../utils/apiCall";
 import UserContext from "./UserContext";
+import UpdateBookingModal from "./UpdateBookingModal";
+import RatingModal from "./RatingModal";
 
 const initialPage = 1;
 
@@ -10,7 +12,6 @@ const Booking = () => {
   const [category, setCategory] = useState("ALL");
   const {user} = useContext(UserContext);
   const rowsPerPage = 10;
-  console.log("User in bookings", user)
 
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
@@ -25,7 +26,6 @@ const Booking = () => {
       const res = response?.data?.data;
       setTableData(res);
       } catch (err) {
-      console.log('Error sending data:', err);
       alert(err)
       }
   }
@@ -66,6 +66,8 @@ const Booking = () => {
               <th className="px-6 py-4">Provider Note</th>
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Booking Date</th>
+              {(user.role === ("CUSTOMER"||"SERVICE_PROVIDER")) &&
+              <th className="px-6 py-4">Actions</th>}
             </tr>
           </thead>
 
@@ -110,6 +112,17 @@ const Booking = () => {
                 <td className="px-6 py-4">
                   {item.bookingDate}
                 </td>
+                {((item.status === "BOOKED") && (user.role === "SERVICE_PROVIDER")) &&
+                <td className="px-6 py-4 flex flex-row">
+                  <UpdateBookingModal status={"COMPLETED"} item={item}/>
+                  <UpdateBookingModal status={"CANCEL"} item={item}/>
+                </td>
+                }
+                {(user.role === "CUSTOMER") &&
+                <td className="px-6 py-4 flex flex-row">
+                  <RatingModal item={item}/>
+                </td>
+                }
               </tr>
             ))}
           </tbody>
@@ -132,7 +145,7 @@ const Booking = () => {
           </span>{" "}
           of{" "}
           <span className="font-medium">
-            {tableData && tableData.length}
+            {(tableData && tableData.length) ? tableData.length : 0}
           </span>
         </p>
 
