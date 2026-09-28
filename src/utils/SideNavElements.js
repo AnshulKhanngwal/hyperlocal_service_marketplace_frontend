@@ -1,7 +1,6 @@
 import Booking from '../components/Booking';
 import Feedback from '../components/Feedback';
 import Notification from '../components/Notification';
-import Report from '../components/Report';
 import Service from '../components/Service';
 import SignOut from '../components/SignOut';
 import Users from '../components/Users';

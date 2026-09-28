@@ -67,8 +67,7 @@ const Booking = () => {
                             <th className="px-6 py-4">Provider Note</th>
                             <th className="px-6 py-4">Status</th>
                             <th className="px-6 py-4">Booking Date</th>
-                            {user.role ===
-                                ('CUSTOMER' || 'SERVICE_PROVIDER') && (
+                            {(user.role === 'CUSTOMER' || user.role === 'SERVICE_PROVIDER') && (
                                 <th className="px-6 py-4">Actions</th>
                             )}
                         </tr>

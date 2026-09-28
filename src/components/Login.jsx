@@ -7,7 +7,7 @@ import UserContext from './UserContext';
 function Login({ setUser }) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
-    const [location, setLocation] = useState({ lat: '', long: '' });
+    const [location, setLocation] = useState({ lat: 0, long: 0 });
     const {
         register,
         handleSubmit,
@@ -23,8 +23,9 @@ function Login({ setUser }) {
     }, []);
     const fetchLocation = () => {
         if (!navigator.geolocation) {
-            return;
+            return false;
         }
+        console.log("Running fetchLocation and came furthur");
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
